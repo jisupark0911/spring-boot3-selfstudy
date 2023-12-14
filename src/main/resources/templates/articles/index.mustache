@@ -1,0 +1,24 @@
+<!-- 목록 페이지 -->
+{{>layouts/header}}
+<table class="table">
+    <thead>
+    <tr>
+        <th scope="col">Id</th>
+        <th scope="col">Title</th>
+        <th scope="col">Content</th>
+    </tr>
+    </thead>
+    <tbody>
+    {{#articleList}} <!--데이터가 묶임인 경우 내부 코드를 반복하여 모두 출력한다. (마치 for문법 실행) -->
+        <tr>
+            <th>{{id}}</th>
+            <td><a href="/articles/{{id}}">{{title}}</a></td>
+            <td>{{content}}</td>
+        </tr>
+    {{/articleList}}
+    </tbody>
+</table>
+
+<a href="/articles/new">New Article</a>
+
+{{>layouts/footer}}

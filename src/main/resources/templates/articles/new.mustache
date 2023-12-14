@@ -1,3 +1,4 @@
+<!-- 글 작성 페이지 -->
 {{>layouts/header}}
 
 <form class="container" action="/articles/create" method="post">
@@ -10,6 +11,7 @@
         <textarea class="form-control" rows="3" name="content"></textarea>
     </div>
     <button type="submit" class="btn btn-primary">Submit</button>
+    <a href="/articles">Back</a>
 </form>
 
 {{>layouts/footer}}
