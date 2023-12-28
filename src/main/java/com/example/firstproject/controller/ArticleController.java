@@ -11,6 +11,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import java.util.List;
 
@@ -66,5 +67,44 @@ public String index(Model model) {
         //3. 뷰 페이지 설정하기
         return "articles/index";
 }
+@GetMapping("/articles/{id}/edit") //이 url로 매핑
+public String edit(@PathVariable Long id, Model model){
 
+        // 수정할 데이터 가져오기
+        Article articleEntity = articleRepository.findById(id).orElse(null);
+        model.addAttribute("article", articleEntity);
+        return "articles/edit"; //이 뷰템플릿을 반환
+}
+@PostMapping("/articles/update")
+public String update(ArticleForm form){
+        log.info(form.toString());
+        //1. DTO를 엔티티로 변환하기
+        Article articleEntity = form.toEntity(); // 여기서 DTO는 form이다.
+        log.info(articleEntity.toString()); //엔티티로 변환잘됐는지 로그찍기.
+        //2. 엔티티를 DB에 저장하기
+        //2-1. DB에서 기존데이터 가져오기
+        Article target = articleRepository.findById(articleEntity.getId()).orElse(null); //레퍼지토리가 db에서 일치하는 id값 꺼내와서 타겟에저장
+        //2-2. 기존데이터 값 갱신하기
+        if(target != null){ //기존데이터가 있다면
+            articleRepository.save(articleEntity); // articleEntity에 저장된 값으로 갱신
+        }
+        //3. 수정 결과 페이지로 리다이렉트하기
+    
+        return "redirect:/articles/"+articleEntity.getId(); //꺼내온 즉 수정한 id의 상세페이지로 리다이렉트
+}
+
+@GetMapping("/articles/{id}/delete")
+    public String delete(@PathVariable Long id, RedirectAttributes rttr){ //리다이렉트 메세지를 보낼수있음 일회성 메세지사용
+        log.info("삭제 요청이 들어왔습니다!");
+        //1. 삭제할 대상 가져오기
+        Article target = articleRepository.findById(id).orElse(null); //DB에서 레파지토러가 맞는 아이디 가져옴
+        log.info(target.toString());
+        //2. 대상 엔티티 삭제하기
+        if(target != null){ //가져온것이 널이 아니면 삭제하기
+            articleRepository.delete(target);
+        }
+        rttr.addFlashAttribute("msg", "삭제됐습니다."); //일회성 데이터등록
+        //3. 결과 페이지로 리다이렉트하기
+        return "redirect:/articles";
+}
 }
