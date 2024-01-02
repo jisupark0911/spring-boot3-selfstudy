@@ -21,4 +21,6 @@
 <a href="/articles/{{article.id}}/edit" class="btn btn-primary">Edit</a> <!-- id가 article속성이고, 태그 바깥에 존재하므로 article.id -->
 <a href="/articles/{{article.id}}/delete" class="btn btn-danger">Delete</a>
 <a href="/articles">Go to Article List</a>
+
+{{>comments/_comments}} <!-- 상세 페이지에 댓글 뷰 파일 삽입 -->
 {{>layouts/footer}}

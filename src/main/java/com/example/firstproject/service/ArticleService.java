@@ -49,6 +49,7 @@ public class ArticleService {
         return updated; // 응답은 컨트롤러가 하므로 수정 데이터만 반환
     }
 
+
     public Article delete(Long id) {
         //1. 대상 찾기
         Article target = articleRepository.findById(id).orElse(null);
@@ -60,6 +61,8 @@ public class ArticleService {
         articleRepository.delete(target);
         return target; // DB에서 삭제한 대상을 컨트롤러에 반환
     }
+
+
 @Transactional
     public List<Article> createArticles(List<ArticleForm> dtos) {
         //1. dto 묶음을 엔티티 묶음으로 변환하기

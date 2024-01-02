@@ -2,8 +2,10 @@ package com.example.firstproject.controller;
 
 import ch.qos.logback.classic.Logger;
 import com.example.firstproject.dto.ArticleForm;
+import com.example.firstproject.dto.CommentDto;
 import com.example.firstproject.entity.Article;
 import com.example.firstproject.repository.ArticleRepository;
+import com.example.firstproject.service.CommentService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -20,6 +22,8 @@ import java.util.List;
 public class ArticleController {
     @Autowired // 스프링 부트가 미리 생성해 놓은 레파지토리 객체 주입 new를 사용해서 객체 생성을 안해도 됨 (DI)의존성 주입
     private ArticleRepository articleRepository;
+    @Autowired
+    private CommentService commentService;
 
 //글 작성 페이지
     @GetMapping("/articles/new")
@@ -27,6 +31,8 @@ public class ArticleController {
 
         return "articles/new";
     }
+
+
 //submit후 동작 과정
 @PostMapping("/articles/create")
     public String CreateArticle(ArticleForm form){
@@ -44,18 +50,24 @@ public class ArticleController {
         return "redirect:/articles/" + saved.getId(); //create페이지는 실존하지 않아서 submit후 리다이렉트로 상세페이지로 보냄, /articles/id값으로 하고싶어서 save객체를 이용
 
     }
+
+
 //상세 페이지
 @GetMapping("/articles/{id}")
     public String show(@PathVariable Long id, Model model){ //@PathVariable은 url의 전달값을 컨트롤러에 매개변수로 가져온다.
         log.info("id = " + id);
         //1. id를 조회해 데이터 가져오기
         Article articleEntity = articleRepository.findById(id).orElse(null);//값이있으면 articleEntity에 넣고 없으면 null
+        List<CommentDto> commentDtos = commentService.comments(id);
         //2. 모델에 데이터 등록하기 (뷰 페이지에서 사용하기 위해 모델을 등록함)
         model.addAttribute("article", articleEntity);
+        model.addAttribute("commentDtos",commentDtos); // 댓글 목록 모델에 등록
         //3. 뷰 페이지 반환하기
         return "articles/show";
 
 }
+
+
 //목록 페이지
 @GetMapping("/articles")
 public String index(Model model) {
@@ -67,6 +79,8 @@ public String index(Model model) {
         //3. 뷰 페이지 설정하기
         return "articles/index";
 }
+
+
 @GetMapping("/articles/{id}/edit") //이 url로 매핑
 public String edit(@PathVariable Long id, Model model){
 
@@ -75,6 +89,8 @@ public String edit(@PathVariable Long id, Model model){
         model.addAttribute("article", articleEntity);
         return "articles/edit"; //이 뷰템플릿을 반환
 }
+
+
 @PostMapping("/articles/update")
 public String update(ArticleForm form){
         log.info(form.toString());
@@ -93,6 +109,7 @@ public String update(ArticleForm form){
         return "redirect:/articles/"+articleEntity.getId(); //꺼내온 즉 수정한 id의 상세페이지로 리다이렉트
 }
 
+
 @GetMapping("/articles/{id}/delete")
     public String delete(@PathVariable Long id, RedirectAttributes rttr){ //리다이렉트 메세지를 보낼수있음 일회성 메세지사용
         log.info("삭제 요청이 들어왔습니다!");
@@ -107,4 +124,5 @@ public String update(ArticleForm form){
         //3. 결과 페이지로 리다이렉트하기
         return "redirect:/articles";
 }
+
 }
