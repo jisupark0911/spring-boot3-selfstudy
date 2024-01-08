@@ -1,4 +1,8 @@
-# 코딩 자율학습 스프링부트3
+# Spring Boot Self-study
+
+이 프로젝트는 "코딩 자율학습 스프링 부트3 자바 백엔드 개발 입문"에 대한 예제 코드와 내용을 담고 있습니다.
+
+## 코딩 자율학습 스프링부트
 
 ![책 이미지](src/main/resources/images/bookimg.jpg)
 
@@ -35,4 +39,4 @@
 ### 원작자 및 출처
 - **원작자:** 홍팍
 - **출처:** 길벗
-- **깃허브:** [080354 Repository](https://github.com/gilbutITbook/080354)
+- **깃허브:** [코딩 자율학습 스프링 부트3 자바 백엔드 개발 입문 코드 저장소](https://github.com/gilbutITbook/080354)
