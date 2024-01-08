@@ -11,6 +11,8 @@
                         <!-- data-bs-toggle="modal" - 클릭하면 모달이 나타나고 다시클릭시 사라짐, data-bs-target="#exampleModal" - 해당 id의 모달 실행, "btn btn-sm btn-outline-primary" - 흰바탕의 파란색 글씨로 변경 -->
                         수정
                     </button>
+                    <!-- 댓글 삭제 버튼 -->
+                    <button type="button" class="btn btn-sm btn-outline-danger comment-delete-btn" data-comment-id="{{id}}">삭제</button>
                 </div>
                 <div class="card-body">
                    {{body}} <!-- 댓글 본문 보여주기 -->
@@ -103,4 +105,41 @@
     });
     }
 
+</script>
+<!-- 댓글 삭제 -->
+<script>
+    // 삭제 버튼 선택
+    const commentDeleteBtns = document.querySelectorAll(".comment-delete-btn");
+
+    // 삭제 버튼 이벤트 처리
+    commentDeleteBtns.forEach(btn => {
+      btn.addEventListener("click", (event) => {
+        // 이벤트 발생 요소 선택
+        const commentDeleteBtn = event.target;
+        // 삭제 댓글 id 가져오기
+        const commentId = commentDeleteBtn.getAttribute("data-comment-id");
+        console.log(`삭제 버튼 클릭: ${commentId}번 댓글`); // 백틱을 사용하면 ${} 문자열에 변수나 식을 넣을수 있다.
+        // 삭제 REST API 호출
+        const url = `/api/comments/${commentId}`;
+        fetch(url, {
+          method: "DELETE"
+        })
+          .then(response => {
+            // 댓글 삭제 실패 처리
+            if (!response.ok) {
+              alert("댓글 삭제 실패");
+              return;
+            }
+            // 삭제 성공 시 댓글을 화면에서 지우고 메세지 창 띄우기
+            const target = document.querySelector(`#comments-${commentId}`);
+            target.remove();
+            const msg = `${commentId}번 댓글을 삭제했습니다.`;
+            alert(msg);
+            window.location.reload();
+          })
+          .catch(error => {
+            console.error("댓글 삭제 중 에러 발생:", error);
+          });
+      });
+    });
 </script>
