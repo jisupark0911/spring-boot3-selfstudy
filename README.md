@@ -1,5 +1,5 @@
 #### 이 코드는 책 "코딩 자율학습 스프링부트3 : 자바 백엔드 개발 입문"의 예제를 기반으로 하였습니다.
-![책](src/main/resources/images/codingimg1.png)
+![책](src/main/resources/images/bookimg.jpg)
 목차
 Part 1 스프링 부트 개요
 
